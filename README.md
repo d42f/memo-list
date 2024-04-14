@@ -6,7 +6,7 @@ A Small app for collecting memos. This example uses SpeechRecognition API to rec
 
 ### `npm start`
 
-Runs the app in the development mode.\
+Runs the app in the development mode.
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ### `npm test`

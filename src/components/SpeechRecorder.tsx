@@ -42,11 +42,13 @@ export const SpeechRecorder = forwardRef<SpeechRecorderRef, SpeechRecorderProps>
   }, [onTranscript]);
 
   useEffect(() => {
-    onTranscriptRef.current?.(transcript);
+    if (transcript) {
+      onTranscriptRef.current?.(transcript);
+    }
   }, [transcript]);
 
   return (
-    <Button className={className} variant={!listening ? 'dark' : 'outline-dark'} size="sm" onClick={handleClick}>
+    <Button className={className} variant={!listening ? 'outline-dark' : 'dark'} size="sm" onClick={handleClick}>
       {!listening ? <>⏺</> : <>⏹</>}
     </Button>
   );

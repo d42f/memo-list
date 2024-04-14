@@ -62,10 +62,10 @@ export const MemoForm = ({ className, onSubmit, onCancel, ...rest }: MemoFormPro
     <Form className={className} onSubmit={handleSubmit}>
       <fieldset>
         <Form.Group className="mb-3" as={Row}>
-          <Form.Label column sm="3" md="2">
+          <Form.Label column sm="3" md="3">
             Description
           </Form.Label>
-          <Col sm="9" md="10">
+          <Col sm="9" md="9">
             <Form.Control
               as="textarea"
               size="sm"
@@ -80,10 +80,10 @@ export const MemoForm = ({ className, onSubmit, onCancel, ...rest }: MemoFormPro
           </Col>
         </Form.Group>
         <Form.Group className="mb-3" as={Row}>
-          <Form.Label column sm="3" md="2">
+          <Form.Label column sm="3" md="3">
             Audio
           </Form.Label>
-          <Col sm="9" md="10">
+          <Col sm="9" md="9">
             {browserSupportsSpeechRecognition ? (
               <SpeechRecorder ref={speechRecorderRef} onTranscript={result => handleChange('description', result)} />
             ) : (

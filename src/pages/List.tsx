@@ -17,7 +17,7 @@ export const List = (): JSX.Element => {
   };
 
   return (
-    <Page>
+    <Page md={{ span: 10, offset: 1 }} lg={{ span: 8, offset: 2 }}>
       <Stack gap={3}>
         {showForm ? (
           <Card header="New memo">

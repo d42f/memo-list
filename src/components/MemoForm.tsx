@@ -1,7 +1,9 @@
 import { FormEvent, KeyboardEvent, useRef, useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
+import { useSpeechRecognition } from 'react-speech-recognition';
 import { Memo, NewMemo } from 'store/memos';
 import { CardBar } from 'components/CardBar';
+import { SpeechRecorder, SpeechRecorderRef } from 'components/SpeechRecorder';
 
 type SubmitCallback<T> = (value: T) => void;
 
@@ -23,6 +25,8 @@ interface MemoFormProps {
 
 export const MemoForm = ({ className, onSubmit, onCancel, ...rest }: MemoFormProps & BaseProps): JSX.Element => {
   const [memo, setMemo] = useState<Memo | NewMemo>('value' in rest ? rest.value : { description: '' });
+  const { browserSupportsSpeechRecognition } = useSpeechRecognition();
+  const speechRecorderRef = useRef<SpeechRecorderRef>(null);
   const submitButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleTextareaKeyUp = (event: KeyboardEvent) => {
@@ -30,7 +34,7 @@ export const MemoForm = ({ className, onSubmit, onCancel, ...rest }: MemoFormPro
     if (event.ctrlKey && (key === 'Enter' || key === 13)) {
       submitButtonRef.current?.click();
     } else if (key === 'Escape' || key === 27) {
-      onCancel?.();
+      handleCancel?.();
     }
   };
 
@@ -40,11 +44,18 @@ export const MemoForm = ({ className, onSubmit, onCancel, ...rest }: MemoFormPro
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
+    speechRecorderRef.current?.stop();
+
     if ('id' in memo) {
       (onSubmit as SubmitCallback<Memo>)(memo);
     } else {
       (onSubmit as SubmitCallback<NewMemo>)(memo);
     }
+  };
+
+  const handleCancel = () => {
+    speechRecorderRef.current?.stop();
+    onCancel?.();
   };
 
   return (
@@ -57,6 +68,7 @@ export const MemoForm = ({ className, onSubmit, onCancel, ...rest }: MemoFormPro
           <Col sm="9" md="10">
             <Form.Control
               as="textarea"
+              size="sm"
               rows={3}
               autoFocus={true}
               placeholder="Enter text"
@@ -67,12 +79,24 @@ export const MemoForm = ({ className, onSubmit, onCancel, ...rest }: MemoFormPro
             />
           </Col>
         </Form.Group>
+        <Form.Group className="mb-3" as={Row}>
+          <Form.Label column sm="3" md="2">
+            Audio
+          </Form.Label>
+          <Col sm="9" md="10">
+            {browserSupportsSpeechRecognition ? (
+              <SpeechRecorder ref={speechRecorderRef} onTranscript={result => handleChange('description', result)} />
+            ) : (
+              <Form.Control plaintext readOnly defaultValue="This browser does not support the Web Speech API." />
+            )}
+          </Col>
+        </Form.Group>
         <CardBar>
           <Button ref={submitButtonRef} type="submit" size="sm">
             Ok
           </Button>
           {onCancel && (
-            <Button type="button" size="sm" variant="link-dark" onClick={onCancel}>
+            <Button type="button" size="sm" variant="link-dark" onClick={handleCancel}>
               Cancel
             </Button>
           )}

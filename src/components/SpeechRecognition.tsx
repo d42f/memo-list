@@ -4,16 +4,16 @@ import { useSpeechRecognition } from 'hooks/useSpeechRecognition';
 
 const DEFAULT_LANGUAGE = 'en-US';
 
-export interface SpeechRecorderRef {
+export interface SpeechRecognitionRef {
   stop: () => void;
 }
 
-interface SpeechRecorderProps {
+interface SpeechRecognitionProps {
   className?: string;
   onTranscript: (result: string) => void;
 }
 
-export const SpeechRecorder = forwardRef<SpeechRecorderRef, SpeechRecorderProps>(function SpeechRecorder(
+export const SpeechRecognition = forwardRef<SpeechRecognitionRef, SpeechRecognitionProps>(function SpeechRecognition(
   { className, onTranscript },
   ref,
 ): JSX.Element {

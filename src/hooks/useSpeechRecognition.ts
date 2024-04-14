@@ -20,14 +20,9 @@ export const useSpeechRecognition = ({
   const { browserSupportsSpeechRecognition: supported, listening, transcript } = baseUseSpeechRecognition();
   const onTranscriptRef = useRef(onTranscript);
 
-  const start = useCallback(() => {
-    return SpeechRecognition.startListening({ language, continuous: true });
-    //const recognition = await SpeechRecognition.getRecognition();
-  }, [language]);
+  const start = useCallback(() => SpeechRecognition.startListening({ language, continuous: true }), [language]);
 
-  const stop = useCallback(() => {
-    return SpeechRecognition.stopListening();
-  }, []);
+  const stop = useCallback(() => SpeechRecognition.stopListening(), []);
 
   useEffect(() => {
     onTranscriptRef.current = onTranscript;

@@ -2,6 +2,11 @@
 
 A Small app for collecting memos. This example uses SpeechRecognition API to recognize an audio input and fill in the form field.
 
+## Available options:
+
+- adding/editing/deleting memo
+- fill in a value using a microphone
+
 ## Available Scripts
 
 ### `npm start`

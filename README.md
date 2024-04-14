@@ -1,6 +1,6 @@
 # memo-list
 
-Small app to collect memos.
+A Small app for collecting memos. This example uses SpeechRecognition API to recognize an audio input and fill in the form field.
 
 ## Available Scripts
 

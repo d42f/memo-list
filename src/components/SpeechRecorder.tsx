@@ -1,6 +1,8 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from 'react';
-import { Button } from 'react-bootstrap';
+import { Badge, Button, OverlayTrigger, Stack, Tooltip } from 'react-bootstrap';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+
+const DEFAULT_LANGUAGE = 'en-US';
 
 export interface SpeechRecorderRef {
   stop: () => void;
@@ -19,7 +21,7 @@ export const SpeechRecorder = forwardRef<SpeechRecorderRef, SpeechRecorderProps>
   const onTranscriptRef = useRef(onTranscript);
 
   const startListening = useCallback(async () => {
-    await SpeechRecognition.startListening({ language: 'en-US', continuous: true });
+    await SpeechRecognition.startListening({ language: DEFAULT_LANGUAGE, continuous: true });
     //const recognition = await SpeechRecognition.getRecognition();
   }, []);
 
@@ -48,8 +50,13 @@ export const SpeechRecorder = forwardRef<SpeechRecorderRef, SpeechRecorderProps>
   }, [transcript]);
 
   return (
-    <Button className={className} variant={!listening ? 'outline-dark' : 'dark'} size="sm" onClick={handleClick}>
-      {!listening ? <>⏺</> : <>⏹</>}
-    </Button>
+    <Stack className={className} direction="horizontal" gap={2}>
+      <Button variant={!listening ? 'outline-dark' : 'dark'} size="sm" onClick={handleClick}>
+        {!listening ? <>⏺</> : <>⏹</>}
+      </Button>
+      <OverlayTrigger placement="right" overlay={<Tooltip>Only {DEFAULT_LANGUAGE}</Tooltip>}>
+        <Badge bg="secondary">?</Badge>
+      </OverlayTrigger>
+    </Stack>
   );
 });

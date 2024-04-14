@@ -7,7 +7,7 @@ A Small app for collecting memos. This example uses SpeechRecognition API to rec
 - adding/editing/deleting memo
 - fill in a value using a microphone
 
-## Available Scripts
+## Available scripts
 
 ### `npm start`
 

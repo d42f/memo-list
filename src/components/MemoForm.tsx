@@ -1,7 +1,7 @@
 import { FormEvent, KeyboardEvent, useRef, useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
-import { useSpeechRecognition } from 'react-speech-recognition';
 import { Memo, NewMemo } from 'store/memos';
+import { useSpeechRecognition } from 'hooks/useSpeechRecognition';
 import { CardBar } from 'components/CardBar';
 import { SpeechRecorder, SpeechRecorderRef } from 'components/SpeechRecorder';
 
@@ -25,7 +25,7 @@ interface MemoFormProps {
 
 export const MemoForm = ({ className, onSubmit, onCancel, ...rest }: MemoFormProps & BaseProps): JSX.Element => {
   const [memo, setMemo] = useState<Memo | NewMemo>('value' in rest ? rest.value : { description: '' });
-  const { browserSupportsSpeechRecognition } = useSpeechRecognition();
+  const { supported: speechRecognitionSupported } = useSpeechRecognition();
   const speechRecorderRef = useRef<SpeechRecorderRef>(null);
   const submitButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -84,7 +84,7 @@ export const MemoForm = ({ className, onSubmit, onCancel, ...rest }: MemoFormPro
             Audio
           </Form.Label>
           <Col sm="9" md="9">
-            {browserSupportsSpeechRecognition ? (
+            {speechRecognitionSupported ? (
               <SpeechRecorder ref={speechRecorderRef} onTranscript={result => handleChange('description', result)} />
             ) : (
               <Form.Control plaintext readOnly defaultValue="This browser does not support the Web Speech API." />

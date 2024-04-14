@@ -1,6 +1,6 @@
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from 'react';
+import { forwardRef, useImperativeHandle } from 'react';
 import { Badge, Button, OverlayTrigger, Stack, Tooltip } from 'react-bootstrap';
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import { useSpeechRecognition } from 'hooks/useSpeechRecognition';
 
 const DEFAULT_LANGUAGE = 'en-US';
 
@@ -17,37 +17,17 @@ export const SpeechRecorder = forwardRef<SpeechRecorderRef, SpeechRecorderProps>
   { className, onTranscript },
   ref,
 ): JSX.Element {
-  const { listening, transcript } = useSpeechRecognition();
-  const onTranscriptRef = useRef(onTranscript);
+  const { listening, start, stop } = useSpeechRecognition({ language: DEFAULT_LANGUAGE, onTranscript });
 
-  const startListening = useCallback(async () => {
-    await SpeechRecognition.startListening({ language: DEFAULT_LANGUAGE, continuous: true });
-    //const recognition = await SpeechRecognition.getRecognition();
-  }, []);
-
-  const stopListening = useCallback(() => {
-    SpeechRecognition.stopListening();
-  }, []);
-
-  const handleClick = async () => {
+  const handleClick = () => {
     if (!listening) {
-      startListening();
+      start();
     } else {
-      stopListening();
+      stop();
     }
   };
 
-  useImperativeHandle(ref, () => ({ stop: stopListening }), [stopListening]);
-
-  useEffect(() => {
-    onTranscriptRef.current = onTranscript;
-  }, [onTranscript]);
-
-  useEffect(() => {
-    if (transcript) {
-      onTranscriptRef.current?.(transcript);
-    }
-  }, [transcript]);
+  useImperativeHandle(ref, () => ({ stop }), [stop]);
 
   return (
     <Stack className={className} direction="horizontal" gap={2}>

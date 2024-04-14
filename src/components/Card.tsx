@@ -3,7 +3,7 @@ import { Card as BootstrapCard } from 'react-bootstrap';
 
 interface CardProps {
   className?: string;
-  header?: string;
+  header?: ReactNode;
   children: ReactNode;
 }
 

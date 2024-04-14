@@ -1,12 +1,14 @@
 import { useState } from 'react';
-import { Button, Stack } from 'react-bootstrap';
-import { NewMemo, addMemo } from 'store/memos';
+import { Alert, Button, Stack } from 'react-bootstrap';
+import { useStore } from '@nanostores/react';
+import { $memos, NewMemo, addMemo, removeMemo, updateMemo } from 'store/memos';
 import { Page } from 'components/Page';
 import { Card } from 'components/Card';
-import { NewMemoForm } from 'components/NewMemoForm';
+import { MemoForm } from 'components/MemoForm';
 import { MemoList } from 'components/MemoList';
 
 export const List = (): JSX.Element => {
+  const memos = useStore($memos);
   const [showForm, setShowForm] = useState(false);
 
   const handleAdd = (memo: NewMemo) => {
@@ -19,14 +21,18 @@ export const List = (): JSX.Element => {
       <Stack gap={3}>
         {showForm ? (
           <Card header="New memo">
-            <NewMemoForm onAdd={handleAdd} onCancel={() => setShowForm(false)} />
+            <MemoForm onSubmit={handleAdd} onCancel={() => setShowForm(false)} />
           </Card>
         ) : (
           <Button className="me-auto" onClick={() => setShowForm(true)}>
             Add new
           </Button>
         )}
-        <MemoList />
+        {memos.length ? (
+          <MemoList memos={memos} onUpdate={(id, patch) => updateMemo({ id, patch })} onRemove={removeMemo} />
+        ) : (
+          <Alert variant="light">Empty list</Alert>
+        )}
       </Stack>
     </Page>
   );

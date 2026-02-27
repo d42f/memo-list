@@ -1,6 +1,6 @@
 # memo-list
 
-A small app for collecting memos. This example uses SpeechRecognition API to recognize an audio input and fill in the form field.
+A test assignment — a small app for managing memos. Uses the SpeechRecognition API to recognize audio input and fill in form fields.
 
 ## Available options
 
